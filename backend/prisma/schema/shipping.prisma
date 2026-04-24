@@ -1,0 +1,29 @@
+// ──────────────────────────────────────────────
+//  MODULE: SHIPPING
+// ──────────────────────────────────────────────
+
+model ShippingMethod {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  estimatedDays Int     @map("estimated_days")
+  baseFee       Decimal @map("base_fee") @db.Decimal(12, 2)
+
+  orderShippings OrderShipping[]
+
+  @@map("shipping_methods")
+}
+
+model OrderShipping {
+  id               Int             @id @default(autoincrement())
+  orderId          Int             @unique @map("order_id")
+  shippingMethodId Int             @map("shipping_method_id")
+  trackingNumber   String?         @map("tracking_number")
+  status           ShippingStatus  @default(PREPARING)
+  shippedAt        DateTime?       @map("shipped_at")
+  deliveredAt      DateTime?       @map("delivered_at")
+
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  shippingMethod ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+
+  @@map("order_shipping")
+}

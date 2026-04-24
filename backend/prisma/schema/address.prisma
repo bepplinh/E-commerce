@@ -1,0 +1,21 @@
+// ──────────────────────────────────────────────
+//  MODULE: ADDRESS
+// ──────────────────────────────────────────────
+
+model Address {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  fullName    String   @map("full_name")
+  phone       String
+  province    String
+  district    String
+  ward        String
+  addressLine String   @map("address_line")
+  isDefault   Boolean  @default(false) @map("is_default")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("addresses")
+}

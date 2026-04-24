@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecommerce
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: ecommerce_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: ecommerce_backend
+    ports:
+      - "5000:5000" # Thay 5000 bằng cổng backend của bạn nếu khác
+    volumes:
+      - ./backend:/app
+      - /app/node_modules # Sẽ sử dụng node_modules trong container, không ghi đè từ local
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql:3306/ecommerce
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mysql
+      - redis
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: ecommerce_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000 # Thay bằng port backend
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  redis_data:

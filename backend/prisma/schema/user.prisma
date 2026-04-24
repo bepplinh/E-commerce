@@ -1,0 +1,53 @@
+// ──────────────────────────────────────────────
+//  MODULE: USER & AUTH
+// ──────────────────────────────────────────────
+
+model User {
+  id        Int        @id @default(autoincrement())
+  username  String     @unique
+  email     String     @unique
+  phone     String?    @unique
+  password  String
+  status    UserStatus @default(ACTIVE)
+  fullName  String?    @map("full_name")
+  avatarUrl String?    @map("avatar_url")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  // ── Relations ──
+  socialAccounts SocialAccount[]
+  refreshTokens  RefreshToken[]
+  userRoles      UserRole[]
+  addresses      Address[]
+  cart           Cart?
+  wishlist       Wishlist?
+  orders         Order[]
+  reviews        Review[]
+  userVouchers   UserVoucher[]
+  notifications  Notification[]
+
+  @@map("users")
+}
+
+model SocialAccount {
+  id         Int    @id @default(autoincrement())
+  userId     Int    @map("user_id")
+  provider   String // google, facebook, apple
+  providerId String @map("provider_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerId])
+  @@map("social_accounts")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}

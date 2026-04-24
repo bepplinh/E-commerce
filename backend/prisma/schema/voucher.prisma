@@ -1,0 +1,37 @@
+// ──────────────────────────────────────────────
+//  MODULE: VOUCHER / COUPON
+// ──────────────────────────────────────────────
+
+model Voucher {
+  id               Int          @id @default(autoincrement())
+  code             String       @unique
+  description      String?
+  discountType     DiscountType @map("discount_type")
+  discountValue    Decimal      @map("discount_value") @db.Decimal(12, 2)
+  minOrderAmount   Decimal      @default(0) @map("min_order_amount") @db.Decimal(12, 2)
+  maxDiscountAmount Decimal?    @map("max_discount_amount") @db.Decimal(12, 2)
+  usageLimit       Int?         @map("usage_limit")
+  usedCount        Int          @default(0) @map("used_count")
+  startsAt         DateTime     @map("starts_at")
+  expiresAt        DateTime     @map("expires_at")
+  isActive         Boolean      @default(true) @map("is_active")
+  createdAt        DateTime     @default(now()) @map("created_at")
+
+  orders       Order[]
+  userVouchers UserVoucher[]
+
+  @@map("vouchers")
+}
+
+model UserVoucher {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  voucherId Int       @map("voucher_id")
+  usedAt    DateTime? @map("used_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  voucher Voucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, voucherId])
+  @@map("user_vouchers")
+}
