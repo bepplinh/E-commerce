@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "prisma:merge": "node prisma/merge-schema.js",
     "prisma:generate": "npm run prisma:merge && npx prisma generate",
@@ -7,7 +8,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "@prisma/client": "^7.8.0",
+    "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -19,6 +20,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "prisma": "^7.8.0"
+    "prisma": "^5.22.0"
   }
 }

@@ -3,8 +3,12 @@
 //  Gộp tất cả *.prisma trong prisma/schema/ vào prisma/schema.prisma
 //  Chạy: node prisma/merge-schema.js
 // ─────────────────────────────────────────────────────────
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const ROOT = path.resolve(__dirname);
 const SCHEMA_DIR = path.join(ROOT, "schema");
@@ -18,12 +22,13 @@ const header = `// ────────────────────�
 // ─────────────────────────────────────────────────────────
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 `;
 
