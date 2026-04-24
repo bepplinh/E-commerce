@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "express-rest-api",
+  "owner": "pluginagentmarketplace",
+  "repo": "custom-plugin-nodejs",
+  "path": "skills/express-rest-api",
+  "branch": "main",
+  "sha": "5131215fa77385b02c6e0d01b05b3dde9b543594",
+  "source": "manual"
+}
