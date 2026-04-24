@@ -1,0 +1,50 @@
+/* ===== Underline: Active (absolute, dưới element) ===== */
+@utility underline-active {
+    position: relative;
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: var(--underline-width, 100%);
+        height: 2px;
+        background-color: currentColor;
+    }
+}
+
+/* ===== Underline: Hover (Trượt từ trái sang, thu về trái) ===== */
+@utility underline-hover {
+    position: relative;
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: var(--underline-width, 100%);
+        height: 2px;
+        background-color: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease-in-out;
+    }
+    &:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+/* ===== Underline: Expand (block-level, giữ nguyên flow, mở rộng width khi hover) ===== */
+@utility underline-expand {
+    &::after {
+        content: "";
+        display: block;
+        width: var(--underline-start-width, 60%);
+        height: 2px;
+        background-color: currentColor;
+        margin-top: 4px;
+        transition: width 0.6s ease;
+    }
+    &:hover::after {
+        width: 100%;
+    }
+}
