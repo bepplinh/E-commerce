@@ -29,6 +29,7 @@ export default function BagItem({ item }: BagItemProps) {
                             alt={item.title}
                             fill
                             className="object-cover"
+                            sizes="120px"
                         />
                     </div>
 

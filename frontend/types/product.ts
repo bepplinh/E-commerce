@@ -7,4 +7,5 @@ export interface Product extends BaseProduct {
     images: string[];
     colors: string[];
     sizes: string[];
+    slug: string;
 }

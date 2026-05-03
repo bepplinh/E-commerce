@@ -1,30 +1,29 @@
 "use client";
 
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useFilterParams } from "@/hooks/useFilterParams";
 
-const data = ["XS", "S", "M", "L", "XL", "XXL"];
+type FilterItem = {
+    id: string | number;
+    name: string;
+};
 
-function SizeCategory() {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const router = useRouter();
+function SizeCategory({ data = [] }: { data?: FilterItem[] }) {
+    const { searchParams, setFilter } = useFilterParams();
 
     const size = searchParams.get("size");
 
     const setSize = (newSize: string) => {
-        const current = new URLSearchParams(Array.from(searchParams.entries()));
-        current.set("size", newSize);
-        router.push(`${pathname}?${current.toString()}`, { scroll: false });
+        setFilter({ size: newSize });
     };
     return (
         <div className="flex gap-6 flex-wrap">
             {data.map((item) => (
-                <div key={item}>
+                <div key={item.id}>
                     <button
-                        className={`px-4 py-1 font-normal text-sm border border-gray-200 hover:bg-gray-200 transition-colors cursor-pointer ${size === item ? "bg-gray-300" : ""}`}
-                        onClick={() => setSize(item)}
+                        className={`px-4 py-1 font-normal text-sm border border-gray-200 hover:bg-gray-200 transition-colors cursor-pointer ${size === item.name ? "bg-gray-300" : ""}`}
+                        onClick={() => setSize(item.name)}
                     >
-                        {item}
+                        {item.name}
                     </button>
                 </div>
             ))}

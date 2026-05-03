@@ -16,14 +16,18 @@ function ProductCardSkeleton() {
     );
 }
 
-export default function ProductGridSkeleton({ view }: { view: number }) {
+export default function ProductGridSkeleton({
+    view,
+}: {
+    view: number;
+}) {
     const gridClass =
         view === 2 ? "grid-cols-2" : view === 3 ? "grid-cols-3" : "grid-cols-4";
 
     return (
         <div className={`mt-8 grid ${gridClass} gap-x-8 gap-y-12`}>
-            {Array.from({ length: 8 }).map((_, i) => (
-                <ProductCardSkeleton key={i} />
+            {Array.from({ length: 8 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
             ))}
         </div>
     );

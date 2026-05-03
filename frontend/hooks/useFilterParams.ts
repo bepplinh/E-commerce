@@ -1,6 +1,9 @@
 "use client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
+import updateSearchParams from "@/helpers/updateSearchParams";
+
+type SearchParamValue = string | number | boolean | null | undefined;
 
 export function useFilterParams() {
     const router = useRouter();
@@ -8,13 +11,9 @@ export function useFilterParams() {
     const searchParams = useSearchParams();
 
     const setFilter = useCallback(
-        (key: string, value: string | null) => {
-            const current = new URLSearchParams(
-                Array.from(searchParams.entries()),
-            );
-            if (value === null) current.delete(key);
-            else current.set(key, value);
-            router.push(`${pathname}?${current.toString()}`, { scroll: false });
+        (updates: Record<string, SearchParamValue>, options: { resetPage?: boolean } = { resetPage: true }) => {
+            const query = updateSearchParams(searchParams, updates, options);
+            router.replace(`${pathname}${query}`, { scroll: false });
         },
         [router, pathname, searchParams],
     );

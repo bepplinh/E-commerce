@@ -12,6 +12,7 @@ export default function HotDealCard({ cardItem }: { cardItem: IHotDealCard }) {
                     width={258}
                     height={312}
                     className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{ width: "auto", height: "auto" }}
                 />
                 <Image
                     className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 object-cover w-full h-auto"
@@ -19,6 +20,7 @@ export default function HotDealCard({ cardItem }: { cardItem: IHotDealCard }) {
                     alt={cardItem.name}
                     width={258}
                     height={312}
+                    style={{ width: "auto", height: "auto" }}
                 />
             </div>
 

@@ -26,6 +26,7 @@ export default function Banner() {
                     priority
                     fill
                     className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 80vw"
                 />
             </div>
         </div>

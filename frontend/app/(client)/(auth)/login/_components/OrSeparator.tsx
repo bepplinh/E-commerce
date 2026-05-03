@@ -1,8 +1,8 @@
-import React from "react";
+
 
 export default function OrSeparator() {
     return (
-        <div className="relative my-8">
+        <div className="relative my-6">
             <div
                 className="absolute inset-0 flex items-center"
                 aria-hidden="true"

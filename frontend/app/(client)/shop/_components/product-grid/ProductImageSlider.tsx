@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ButtonAddToCart from "./ButtonAddToCart";
 
 import { Product } from "@/types/product";
@@ -10,10 +10,19 @@ import { Product } from "@/types/product";
 interface ImageCardProps {
     images: string[];
     product: Product;
+    activeColorIndex?: number;
 }
 
-export default function ImageCard({ images, product }: ImageCardProps) {
+export default function ImageCard({ images, product, activeColorIndex }: ImageCardProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (activeColorIndex !== undefined) {
+            // Ensure the index exists in images array, fallback to 0 or current max
+            const validIndex = Math.min(activeColorIndex, images.length - 1);
+            setCurrentIndex(Math.max(0, validIndex));
+        }
+    }, [activeColorIndex, images.length]);
 
     const prevSlide = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -28,23 +37,29 @@ export default function ImageCard({ images, product }: ImageCardProps) {
     return (
         <div className="relative group overflow-hidden">
             <div className="relative aspect-3/4 w-full">
-                {images.map((src, index) => (
-                    <div
-                        key={src}
-                        className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                            index === currentIndex ? "opacity-100" : "opacity-0"
-                        }`}
-                    >
-                        <Image
-                            src={src}
-                            alt={`product-${index}`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                            priority={index === 0}
-                        />
-                    </div>
-                ))}
+                {images.map((src, index) => {
+                    const isVisible = index === currentIndex || index === 0;
+                    if (!isVisible) return null;
+                    return (
+                        <div
+                            key={src}
+                            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                                index === currentIndex
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                            }`}
+                        >
+                            <Image
+                                src={src}
+                                alt={`product-${index}`}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                                priority={index === 0}
+                            />
+                        </div>
+                    );
+                })}
             </div>
 
             <div className="absolute inset-0 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none p-2">

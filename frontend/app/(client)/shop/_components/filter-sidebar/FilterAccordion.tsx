@@ -10,12 +10,14 @@ interface SelectCategoryProps {
     children: React.ReactNode;
     title: string;
     filterKey: FilterTypes;
+
 }
 
 export default function FilterAccordion({
     children,
     title,
     filterKey,
+
 }: SelectCategoryProps) {
     const toggleFilter = useCategoryShopStore((state) => state.toggleFilter);
     const isOpen = useCategoryShopStore((state) => state.isOpen[filterKey]);

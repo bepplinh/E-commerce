@@ -72,26 +72,18 @@ export default function Banner() {
 
                 {/* Right Image */}
                 <div className="relative flex justify-center md:justify-end order-1 md:order-2">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                            duration: 1.5,
-                            delay: 0.4,
-                            ease: "easeOut",
-                        }}
-                        className="relative w-[300px] lg:w-[500px] aspect-4/5"
-                    >
+                    <div className="relative w-[300px] lg:w-[500px] aspect-4/5">
                         <div className="absolute inset-0 z-10">
                             <Image
                                 src={slide_show}
                                 alt="Night Spring Dresses"
                                 fill
                                 className="object-contain"
+                                sizes="(max-width: 1024px) 300px, 500px"
                                 priority
                             />
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
 

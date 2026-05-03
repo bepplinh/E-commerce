@@ -17,8 +17,7 @@ const Footer = () => {
                                 alt="Surfside Media"
                                 width={180}
                                 height={50}
-                                className="h-auto"
-                                style={{ height: "auto" }}
+                                style={{ height: "auto", width: "auto" }}
                             />
                         </div>
                         <div className="text-gray-500 space-y-3 text-sm leading-relaxed">

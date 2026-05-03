@@ -41,9 +41,9 @@ export default function YouMightLike() {
                         ref={scrollRef}
                         className="max-w-full overflow-x-auto flex flex-nowrap gap-6 md:gap-10 items-center py-4 px-1 scrollbar-hide"
                     >
-                        {dataCategory.map((item) => (
+                        {dataCategory.map((item, index) => (
                             <div key={item.id} className="shrink-0">
-                                <ItemCategory item={item} />
+                                <ItemCategory item={item} priority={index < 4} />
                             </div>
                         ))}
                     </div>

@@ -12,7 +12,7 @@ function Logo() {
                 height={53}
                 priority
                 className="w-full h-auto"
-                style={{ height: "auto" }}
+                style={{ width: "auto", height: "auto" }}
             />
         </Link>
     );

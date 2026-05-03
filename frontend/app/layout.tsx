@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Jost, Geist } from "next/font/google";
 import { Toaster } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/libs/utils";
+import { getAuthUser } from "@/libs/auth";
+import AuthInitializer from "@/components/shared/AuthInitializer";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const jost = Jost({
     subsets: ["latin"],
@@ -16,11 +18,13 @@ export const metadata: Metadata = {
     description: "Thuong mai dien tu",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const { isAuth, user } = await getAuthUser();
+
     return (
         <html
             lang="en"
@@ -28,6 +32,7 @@ export default function RootLayout({
             className={cn("h-full", "antialiased", jost.className, "font-sans", geist.variable)}
         >
             <body className="min-h-full flex flex-col" suppressHydrationWarning>
+                <AuthInitializer isAuth={isAuth} user={user} />
                 {children}
                 <Toaster position="top-right" richColors />
             </body>

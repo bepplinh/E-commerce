@@ -39,7 +39,7 @@ function ProductImage() {
                         }`}
                         onClick={() => setCurrentIndexImage(index)}
                     >
-                        <Image src={src} alt="" fill className="object-cover" />
+                        <Image src={src} alt="" fill className="object-cover" sizes="104px" />
                     </div>
                 ))}
             </div>
@@ -61,6 +61,7 @@ function ProductImage() {
                                 alt={`product-${index}`}
                                 fill
                                 className="object-cover"
+                                sizes="(max-width: 768px) 100vw, 674px"
                                 priority={index === 0}
                             />
                         </div>

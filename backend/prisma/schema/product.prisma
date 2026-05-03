@@ -69,6 +69,7 @@ model OptionValue {
   id       Int    @id @default(autoincrement())
   optionId Int    @map("option_id")
   value    String // e.g. "M", "Red"
+  metadata Json?  // e.g. { "hexCode": "#000000" } for Color options
 
   option          ProductOption        @relation(fields: [optionId], references: [id], onDelete: Cascade)
   variantMappings VariantOptionValue[]
@@ -118,3 +119,4 @@ model ProductImage {
   @@index([productId])
   @@map("product_images")
 }
+

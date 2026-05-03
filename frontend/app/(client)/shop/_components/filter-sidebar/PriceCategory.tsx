@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { useFilterParams } from "@/hooks/useFilterParams";
 
 const MIN_LIMIT = 0;
 const MAX_LIMIT = 1000;
@@ -15,17 +16,31 @@ const sliderThumbClasses = `
 `;
 
 function PriceCategory() {
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const { searchParams, setFilter } = useFilterParams();
+  const minValue = searchParams.get("priceMin");
+  const maxValue = searchParams.get("priceMax");
+
+  const minPrice = minValue === null ? MIN_LIMIT : Number(minValue);
+  const maxPrice = maxValue === null ? MAX_LIMIT : Number(maxValue);
+
+  const safeMinPrice = Number.isFinite(minPrice) ? minPrice : MIN_LIMIT;
+  const safeMaxPrice = Number.isFinite(maxPrice) ? maxPrice : MAX_LIMIT;
+
+  const updatePrice = (nextMin: number, nextMax: number) => {
+    setFilter({
+      priceMin: nextMin,
+      priceMax: nextMax,
+    });
+  };
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(Number(e.target.value), maxPrice - STEP);
-    setMinPrice(value);
+    const value = Math.min(Number(e.target.value), safeMaxPrice - STEP);
+    updatePrice(value, safeMaxPrice);
   };
 
   const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(Number(e.target.value), minPrice + STEP);
-    setMaxPrice(value);
+    const value = Math.max(Number(e.target.value), safeMinPrice + STEP);
+    updatePrice(safeMinPrice, value);
   };
 
   return (
@@ -36,8 +51,8 @@ function PriceCategory() {
         <div
           className="absolute h-1 bg-black rounded-full"
           style={{
-            left: `${(minPrice / MAX_LIMIT) * 100}%`,
-            right: `${100 - (maxPrice / MAX_LIMIT) * 100}%`,
+            left: `${(safeMinPrice / MAX_LIMIT) * 100}%`,
+            right: `${100 - (safeMaxPrice / MAX_LIMIT) * 100}%`,
           }}
         />
 
@@ -46,7 +61,7 @@ function PriceCategory() {
           min={MIN_LIMIT}
           max={MAX_LIMIT}
           step={STEP}
-          value={minPrice}
+          value={safeMinPrice}
           onChange={handleMinChange}
           className={`absolute left-0 w-full appearance-none bg-transparent pointer-events-none z-20 ${sliderThumbClasses}`}
         />
@@ -56,7 +71,7 @@ function PriceCategory() {
           min={MIN_LIMIT}
           max={MAX_LIMIT}
           step={STEP}
-          value={maxPrice}
+          value={safeMaxPrice}
           onChange={handleMaxChange}
           className={`absolute left-0 w-full appearance-none bg-transparent pointer-events-none z-10 ${sliderThumbClasses}`}
         />
@@ -65,12 +80,12 @@ function PriceCategory() {
       <div className="flex items-center justify-between mt-6">
         <p className="text-[14px] font-normal">
           <span className="text-gray-500">MinPrice:</span>{" "}
-          <span className="font-normal">${minPrice}</span>
+          <span className="font-normal">${safeMinPrice}</span>
         </p>
 
         <p className="text-[14px] font-normal">
           <span className="text-gray-500">MaxPrice:</span>{" "}
-          <span className="font-normal">${maxPrice}</span>
+          <span className="font-normal">${safeMaxPrice}</span>
         </p>
       </div>
     </div>

@@ -4,8 +4,15 @@ import ProductTabs from "./_components/ProductTabs";
 import TabDescription from "./_components/ProductTabs/TabDescription";
 import TabAdditionalInfo from "./_components/ProductTabs/TabAdditionalInfo";
 import TabReviews from "./_components/ProductTabs/TabReviews";
+import { getProductBySlug } from "@/services/client/product.service";
 
-export default function ProductDetailPage() {
+export default async function ProductDetailPage({
+    searchParams,
+}: {
+    searchParams: { slug: Promise<string> };
+}) {
+    const slug = await searchParams.slug;
+    const product = await getProductBySlug(slug);
     const tabs = [
         { label: "DESCRIPTION", content: <TabDescription /> },
         { label: "ADDITIONAL INFORMATION", content: <TabAdditionalInfo /> },
