@@ -8,6 +8,7 @@ import errorMiddleware from "./src/middlewares/error.middleware.js";
 import productRouter from "./src/modules/product/product.route.js";
 import cartRouter from "./src/modules/cart/cart.route.js";
 import uploadRouter from "./src/modules/upload/upload.route.js";
+import orderRouter from "./src/modules/order/order.route.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/upload", uploadRouter);
+app.use("/api/v1/orders", orderRouter);
 
 // Error handling middleware (must be registered last)
 app.use(errorMiddleware);

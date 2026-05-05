@@ -44,5 +44,11 @@ const updateQuantity = async ({ userId, variantId, quantity }) => {
     return updatedItem;
 };
 
-export { addToCart, removeFromCart, getCart, updateQuantity };
+const clearCart = async (userId) => {
+    const cart = await cartRepo.findCartByUserId(userId);
+    if (!cart) throw new NotFoundError("Không tìm thấy giỏ hàng");
 
+    return await cartRepo.clearCart(userId);
+};
+
+export { addToCart, removeFromCart, getCart, updateQuantity };

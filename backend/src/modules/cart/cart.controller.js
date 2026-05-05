@@ -53,5 +53,15 @@ const updateQuantity = async (req, res) => {
     });
 };
 
-export { addToCart, removeFromCart, getCart, updateQuantity };
+const clearCart = async (req, res) => {
+    const userId = req.user.id;
+    const result = await cartService.clearCart(userId);
 
+    res.status(200).json({
+        success: true,
+        message: "Cart cleared successfully",
+        data: result,
+    });
+};
+
+export { addToCart, removeFromCart, getCart, updateQuantity, clearCart };

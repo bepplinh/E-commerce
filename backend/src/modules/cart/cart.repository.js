@@ -53,4 +53,10 @@ const updateCartItem = ({ cartId, variantId }, quantity) => {
         data: { quantity },
     });
 };
-export { findCartByUserId, createCart, upsertCartItem, deleteCartItem, updateCartItem };
+
+const clearCart = (userId) => {
+    return prisma.cart.delete({
+        where: { userId },
+    });
+};
+export { findCartByUserId, createCart, upsertCartItem, deleteCartItem, updateCartItem, clearCart };

@@ -9,14 +9,7 @@ const getFilter = async (req, res, next) => {
 
 const getProduct = async (req, res, next) => {
     try {
-        const { category, color, brand, size, minPrice, maxPrice, page, limit } = req.query;
-        const data = await productService.getProductList({
-            category, color, brand, size,
-            minPrice: minPrice ? parseFloat(minPrice) : undefined,
-            maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
-            page: page ? parseInt(page) : 1,
-            limit: limit ? parseInt(limit) : 10,
-        });
+        const data = await productService.getProductList(req.query);
         res.status(200).json({ data, status: "success" });
     } catch (err) { next(err); }
 };
@@ -31,8 +24,6 @@ const getProductDetail = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
     try {
-        // Body đã được validate bằng Zod qua validate middleware
-        // imageUrls lấy từ API /upload (optional, mặc định [])
         const product = await productService.createProduct(req.body);
 
         res.status(201).json({
@@ -43,5 +34,16 @@ const createProduct = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-export { getFilter, getProduct, getProductDetail, createProduct };
+const updateProduct = async (req, res, next) => {
+    try {
+        const product = await productService.updateProduct(req.params.id, req.body);
 
+        res.status(200).json({
+            status: "success",
+            message: "Cập nhật sản phẩm thành công",
+            data: product,
+        });
+    } catch (err) { next(err); }
+};
+
+export { getFilter, getProduct, getProductDetail, createProduct, updateProduct };

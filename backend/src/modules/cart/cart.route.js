@@ -9,6 +9,6 @@ cartRouter.get("/", getCart);
 cartRouter.post("/", addToCart);
 cartRouter.delete("/", removeFromCart);
 cartRouter.patch("/item", updateQuantity); // PATCH /api/cart/item
+cartRouter.delete("/", clearCart);
 
 export default cartRouter;
-
