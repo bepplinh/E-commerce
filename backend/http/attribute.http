@@ -1,0 +1,29 @@
+### Get All Attributes
+GET http://localhost:5000/api/v1/admin/attributes
+Authorization: Bearer {{adminToken}}
+
+### Create New Attribute
+POST http://localhost:5000/api/v1/admin/attributes
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "name": "Material"
+}
+
+### Get Attribute Detail
+GET http://localhost:5000/api/v1/admin/attributes/1
+Authorization: Bearer {{adminToken}}
+
+### Update Attribute
+PATCH http://localhost:5000/api/v1/admin/attributes/1
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "name": "Color (Updated)"
+}
+
+### Delete Attribute
+DELETE http://localhost:5000/api/v1/admin/attributes/5
+Authorization: Bearer {{adminToken}}

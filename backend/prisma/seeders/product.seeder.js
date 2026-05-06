@@ -142,14 +142,27 @@ export const seedProducts = async (prisma) => {
     const optionValueMap = {}; // { 'Color': { 'White': ID, 'Black': ID } }
 
     for (const optName of optionNames) {
-      // Tìm hoặc tạo ProductOption
+      // Tìm hoặc tạo Attribute tổng (Màu sắc, Kích thước...)
+      const attribute = await prisma.attribute.upsert({
+        where: { name: optName },
+        update: {},
+        create: { name: optName }
+      });
+
+      // Tìm hoặc tạo ProductOption cho sản phẩm này
       let productOption = await prisma.productOption.findFirst({
-        where: { productId: product.id, name: optName }
+        where: { 
+          productId: product.id, 
+          attributeId: attribute.id 
+        }
       });
 
       if (!productOption) {
         productOption = await prisma.productOption.create({
-          data: { productId: product.id, name: optName }
+          data: { 
+            productId: product.id, 
+            attributeId: attribute.id 
+          }
         });
       }
 

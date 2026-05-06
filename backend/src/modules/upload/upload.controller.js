@@ -1,3 +1,4 @@
+import ApiResponse from "../../helpers/response.helper.js";
 import upload from "../../middlewares/upload.middleware.js";
 
 /**
@@ -10,16 +11,17 @@ const uploadImages = (req, res, next) => {
         if (err) return next(err);
 
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({
-                status: "fail",
+            return ApiResponse(res, {
+                statusCode: 400,
+                success: false,
                 message: "Không có file nào được upload",
             });
         }
 
         const urls = req.files.map((file) => file.path);
 
-        res.status(200).json({
-            status: "success",
+        return ApiResponse(res, {
+            statusCode: 200,
             message: `Upload thành công ${urls.length} ảnh`,
             data: { urls },
         });
@@ -27,3 +29,4 @@ const uploadImages = (req, res, next) => {
 };
 
 export { uploadImages };
+

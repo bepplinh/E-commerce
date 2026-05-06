@@ -26,7 +26,7 @@ export const productDetailInclude = {
     // Trả về toàn bộ ảnh (cả global lẫn per-variant)
     images: true,
     options: {
-        include: { values: true },
+        include: { attribute: true, values: true },
     },
     variants: {
         where: { isActive: true },

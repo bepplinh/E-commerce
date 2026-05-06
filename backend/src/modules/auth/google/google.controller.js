@@ -1,3 +1,4 @@
+import ApiResponse from "../../../helpers/response.helper.js";
 import { BadRequestError } from "../../../utils/app-error.js";
 import googleService from "./google.service.js";
 
@@ -18,8 +19,8 @@ const loginByGoogle = async (req, res) => {
     // Refresh token → httpOnly cookie
     res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
 
-    return res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Login successfully",
         data: {
             token: result.accessToken,
@@ -29,3 +30,4 @@ const loginByGoogle = async (req, res) => {
 };
 
 export default loginByGoogle;
+

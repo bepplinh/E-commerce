@@ -16,6 +16,10 @@ const OrderRepository = {
     countOrders: (filters) => {
         return prisma.order.count({ where: filters });
     },
+
+    createOrder: (data) => {
+        return prisma.order.create();
+    },
 };
 
 export default OrderRepository;

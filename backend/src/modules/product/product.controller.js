@@ -1,49 +1,47 @@
+import ApiResponse from "../../helpers/response.helper.js";
 import * as productService from "./product.service.js";
 
-const getFilter = async (req, res, next) => {
-    try {
-        const data = await productService.getFilterData();
-        res.status(200).json({ data, status: "success" });
-    } catch (err) { next(err); }
+const getFilter = async (req, res) => {
+    const data = await productService.getFilterData();
+    return ApiResponse(res, {
+        statusCode: 200,
+        data,
+    });
 };
 
-const getProduct = async (req, res, next) => {
-    try {
-        const data = await productService.getProductList(req.query);
-        res.status(200).json({ data, status: "success" });
-    } catch (err) { next(err); }
+const getProduct = async (req, res) => {
+    const data = await productService.getProductList(req.query);
+    return ApiResponse(res, {
+        statusCode: 200,
+        data,
+    });
 };
 
-const getProductDetail = async (req, res, next) => {
-    try {
-        const { slug } = req.params;
-        const product = await productService.getProductDetail(slug);
-        res.status(200).json({ data: product, status: "success" });
-    } catch (err) { next(err); }
+const getProductDetail = async (req, res) => {
+    const { slug } = req.params;
+    const product = await productService.getProductDetail(slug);
+    return ApiResponse(res, {
+        statusCode: 200,
+        data: product,
+    });
 };
 
-const createProduct = async (req, res, next) => {
-    try {
-        const product = await productService.createProduct(req.body);
-
-        res.status(201).json({
-            status: "success",
-            message: "Tạo sản phẩm thành công",
-            data: product,
-        });
-    } catch (err) { next(err); }
+const createProduct = async (req, res) => {
+    const product = await productService.createProduct(req.body);
+    return ApiResponse(res, {
+        statusCode: 201,
+        message: "Tạo sản phẩm thành công",
+        data: product,
+    });
 };
 
-const updateProduct = async (req, res, next) => {
-    try {
-        const product = await productService.updateProduct(req.params.id, req.body);
-
-        res.status(200).json({
-            status: "success",
-            message: "Cập nhật sản phẩm thành công",
-            data: product,
-        });
-    } catch (err) { next(err); }
+const updateProduct = async (req, res) => {
+    const product = await productService.updateProduct(req.params.id, req.body);
+    return ApiResponse(res, {
+        statusCode: 200,
+        message: "Cập nhật sản phẩm thành công",
+        data: product,
+    });
 };
 
 export { getFilter, getProduct, getProductDetail, createProduct, updateProduct };

@@ -5,12 +5,14 @@
     "prisma:generate": "npm run prisma:merge && npx prisma generate",
     "prisma:migrate": "npm run prisma:merge && npx prisma migrate dev",
     "prisma:studio": "npm run prisma:merge && npx prisma studio",
-    "dev": "nodemon server.js",
+    "dev": "nodemon index.js",
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@payos/node": "^2.0.5",
     "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
+    "bullmq": "^5.76.5",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",

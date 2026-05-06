@@ -1,0 +1,5 @@
+###Get Product By Slug
+GET http://localhost:5000/api/v1/products/nike-air-force-1-07
+Content-Type: application/json
+
+###

@@ -54,13 +54,22 @@ model Product {
   @@map("products")
 }
 
-model ProductOption {
-  id        Int    @id @default(autoincrement())
-  productId Int    @map("product_id")
-  name      String // e.g. "Size", "Color"
+model Attribute {
+  id      Int             @id @default(autoincrement())
+  name    String          @unique
+  options ProductOption[]
 
-  product Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
-  values  OptionValue[]
+  @@map("attributes")
+}
+
+model ProductOption {
+  id          Int    @id @default(autoincrement())
+  productId   Int    @map("product_id")
+  attributeId Int    @map("attribute_id")
+
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  attribute Attribute   @relation(fields: [attributeId], references: [id], onDelete: Restrict)
+  values    OptionValue[]
 
   @@map("product_options")
 }

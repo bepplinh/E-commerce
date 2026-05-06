@@ -5,12 +5,26 @@ const findUserByEmailOrUsername = async (email, username, client = prisma) => {
         where: {
             OR: [{ email }, { username }],
         },
+        include: {
+            userRoles: {
+                include: {
+                    role: true,
+                },
+            },
+        },
     });
 };
 
 const findUserByEmail = async (email, client = prisma) => {
     return client.user.findUnique({
         where: { email },
+        include: {
+            userRoles: {
+                include: {
+                    role: true,
+                },
+            },
+        },
     });
 };
 
@@ -23,6 +37,13 @@ const createUser = async (data, client = prisma) => {
 const getUserById = async (userId, client = prisma) => {
     return client.user.findUnique({
         where: { id: userId },
+        include: {
+            userRoles: {
+                include: {
+                    role: true,
+                },
+            },
+        },
     });
 };
 

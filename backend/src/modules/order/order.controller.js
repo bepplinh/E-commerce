@@ -1,3 +1,4 @@
+import ApiResponse from "../../helpers/response.helper.js";
 import orderService from "./order.service.js";
 
 const OrderController = {
@@ -6,8 +7,13 @@ const OrderController = {
         const queryParams = req.query;
         const result = await orderService.getOrderByUserId(userId, queryParams);
 
-        return ApiResponse(res, "order fetched successfully", result.data, result.meta);
+        return ApiResponse(res, {
+            message: "order fetched successfully",
+            data: result.data,
+            meta: result.meta,
+        });
     },
 };
 
 export default OrderController;
+

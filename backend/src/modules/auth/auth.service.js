@@ -9,10 +9,14 @@ const ACCESS_TOKEN_EXPIRES = "15m";
 const REFRESH_TOKEN_EXPIRES_MS = 7 * 24 * 60 * 60 * 1000; // 7 ngày
 
 // ── Helpers ──
-const signAccessToken = (user) =>
-    jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+const signAccessToken = (user) => {
+    // Lấy role đầu tiên của user (ví dụ: "admin" hoặc "user")
+    const role = user.userRoles?.[0]?.role?.name || "user";
+    
+    return jwt.sign({ id: user.id, email: user.email, role }, JWT_SECRET, {
         expiresIn: ACCESS_TOKEN_EXPIRES,
     });
+};
 
 const generateRefreshToken = () => crypto.randomBytes(64).toString("hex");
 
@@ -22,6 +26,7 @@ const pickPublicUser = (user) => ({
     email: user.email,
     fullName: user.fullName,
     avatarUrl: user.avatarUrl ?? null,
+    role: user.userRoles?.[0]?.role?.name || "user",
 });
 
 // ── Services ──

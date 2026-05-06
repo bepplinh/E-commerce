@@ -1,17 +1,20 @@
 "use client";
 
+import { useTransition } from "react";
 import useCartStore from "@/stores/useCartStore";
 import { Product } from "@/types/product";
 import { toast } from "sonner";
+import { addToCartAction } from "@/actions/cart-actions";
 
 export default function ButtonAddToCart({ product }: { product: Product }) {
     const addToCart = useCartStore((state) => state.addToCart);
+    const [isPending, startTransition] = useTransition();
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
-        addToCart({
+        const cartItem = {
             id: product.id,
             title: product.title,
             price: product.price,
@@ -19,9 +22,17 @@ export default function ButtonAddToCart({ product }: { product: Product }) {
             quantity: 1,
             color: product.colors[0],
             size: product.sizes[0],
-        });
+        };
 
-        toast.success("Product added to cart");
+        addToCart(cartItem);
+        toast.success("Đã thêm vào giỏ hàng");
+
+        startTransition(async () => {
+            const result = await addToCartAction(cartItem);
+            if (!result.success) {
+                toast.error(result.message);
+            }
+        });
     };
 
     return (

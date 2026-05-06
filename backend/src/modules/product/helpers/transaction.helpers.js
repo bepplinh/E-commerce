@@ -43,10 +43,17 @@ export const createProductOptions = async (tx, productId, options) => {
     if (!options || options.length === 0) return optionValueMap;
 
     for (const option of options) {
+        // Tìm hoặc tạo mới Attribute chung (Size, Color, ...)
+        const attribute = await tx.attribute.upsert({
+            where: { name: option.name },
+            update: {},
+            create: { name: option.name },
+        });
+
         const createdOption = await tx.productOption.create({
             data: {
                 productId,
-                name: option.name,
+                attributeId: attribute.id,
                 values: {
                     create: option.values.map((v) => ({
                         value: v.value,

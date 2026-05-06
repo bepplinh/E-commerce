@@ -1,3 +1,4 @@
+import ApiResponse from "../../helpers/response.helper.js";
 import * as cartService from "./cart.service.js";
 
 const getCart = async (req, res) => {
@@ -5,8 +6,8 @@ const getCart = async (req, res) => {
 
     const result = await cartService.getCart(userId);
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Cart fetched successfully",
         data: result,
     });
@@ -18,9 +19,8 @@ const addToCart = async (req, res) => {
 
     const result = await cartService.addToCart({ variantId, quantity, userId });
 
-    res.status(200).json({
-        success: true,
-        status: 201,
+    return ApiResponse(res, {
+        statusCode: 201,
         message: "Added to cart successfully",
         data: result,
     });
@@ -32,8 +32,8 @@ const removeFromCart = async (req, res) => {
 
     const result = await cartService.removeFromCart({ variantId, userId });
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Removed from cart successfully",
         data: result,
     });
@@ -46,8 +46,8 @@ const updateQuantity = async (req, res) => {
 
     const result = await cartService.updateQuantity({ variantId, quantity: parseInt(quantity), userId });
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Quantity updated successfully",
         data: result,
     });
@@ -57,11 +57,12 @@ const clearCart = async (req, res) => {
     const userId = req.user.id;
     const result = await cartService.clearCart(userId);
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Cart cleared successfully",
         data: result,
     });
 };
 
 export { addToCart, removeFromCart, getCart, updateQuantity, clearCart };
+

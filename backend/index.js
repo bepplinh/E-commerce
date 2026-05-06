@@ -9,6 +9,9 @@ import productRouter from "./src/modules/product/product.route.js";
 import cartRouter from "./src/modules/cart/cart.route.js";
 import uploadRouter from "./src/modules/upload/upload.route.js";
 import orderRouter from "./src/modules/order/order.route.js";
+import rbacRouter from "./src/modules/rbac/rbac.route.js";
+import adminRouter from "./src/modules/admin/admin.route.js";
+import verifyToken from "./src/middlewares/auth.middleware.js";
 
 dotenv.config();
 
@@ -26,6 +29,10 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/rbac", rbacRouter);
+
+app.use(verifyToken);
+app.use("/api/v1/admin", adminRouter);
 
 // Error handling middleware (must be registered last)
 app.use(errorMiddleware);

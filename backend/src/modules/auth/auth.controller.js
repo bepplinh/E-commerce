@@ -1,3 +1,4 @@
+import ApiResponse from "../../helpers/response.helper.js";
 import * as authService from "./auth.service.js";
 
 const REFRESH_COOKIE_OPTIONS = {
@@ -13,8 +14,8 @@ const register = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
 
-    res.status(201).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 201,
         message: "User registered successfully",
         data: {
             token: accessToken,
@@ -30,8 +31,8 @@ const login = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Login successful",
         data: {
             token: accessToken,
@@ -47,8 +48,8 @@ const refresh = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         data: {
             token: accessToken,
             refreshToken: refreshToken,
@@ -64,18 +65,19 @@ const logout = async (req, res) => {
     res.clearCookie("refreshToken", { path: "/" });
     res.clearCookie("accessToken", { path: "/" });
 
-    res.status(200).json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         message: "Logout successful",
     });
 };
 
 const getMe = async (req, res) => {
     const user = await authService.getUserInfo(req.user.id);
-    res.json({
-        success: true,
+    return ApiResponse(res, {
+        statusCode: 200,
         data: user,
     });
 };
 
 export { register, login, refresh, logout, getMe };
+

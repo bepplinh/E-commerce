@@ -2,26 +2,40 @@ import productRepository from "./product.repository.js";
 import { NotFoundError } from "../../utils/app-error.js";
 import { buildWhereClause } from "./utils/product-filter.utils.js";
 import { parseProductListQuery } from "./utils/product-query.utils.js";
-import { createProduct as createProductCommand, updateProduct as updateProductCommand } from "./product.write.service.js";
-
-// ── Services ──────────────────────────────────────────────────────────────────
-
+import {
+    createProduct as createProductCommand,
+    updateProduct as updateProductCommand,
+} from "./product.write.service.js";
 
 const getFilterData = async () => {
-    const [brands, categories, colors, sizes] = await Promise.all([
+    const [brands, categories, attributes] = await Promise.all([
         productRepository.getBrands(),
         productRepository.getCategory(),
-        productRepository.getFilterOptions("Color"),
-        productRepository.getFilterOptions("Size"),
+        productRepository.getAttributes(),
     ]);
 
-    return { brands, categories, colors, sizes };
+    const attributeFilters = await Promise.all(
+        attributes.map(async (attr) => {
+            const values = await productRepository.getUniqueValuesByAttributeId(attr.id);
+            return {
+                id: attr.id,
+                name: attr.name,
+                values,
+            };
+        })
+    );
+
+    return {
+        brands,
+        categories,
+        attributes: attributeFilters,
+    };
 };
 
 const getProductList = async (query) => {
     const { category, color, brand, size, minPrice, maxPrice, page, limit } = parseProductListQuery(query);
     const where = buildWhereClause({ category, brand, color, size, minPrice, maxPrice });
-    const skip  = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
     const [products, total] = await productRepository.getProducts(where, skip, limit);
 

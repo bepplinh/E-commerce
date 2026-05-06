@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:5000/api/v1
+@token = YOUR_ACCESS_TOKEN_HERE
+
+### Get all permissions
+GET {{baseUrl}}/rbac/permissions
+Authorization: Bearer {{token}}
+
+### Create a permission
+POST {{baseUrl}}/rbac/permissions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "MANAGE_PRODUCTS"
+}
+
+### Create another permission
+POST {{baseUrl}}/rbac/permissions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "VIEW_DASHBOARD"
+}
+
+### Get all roles
+GET {{baseUrl}}/rbac/roles
+Authorization: Bearer {{token}}
+
+### Create a role
+POST {{baseUrl}}/rbac/roles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Manager",
+    "permissionIds": [1, 2]
+}
+
+### Get role by ID
+GET {{baseUrl}}/rbac/roles/1
+Authorization: Bearer {{token}}
+
+### Update role
+PUT {{baseUrl}}/rbac/roles/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Senior Manager",
+    "permissionIds": [1]
+}
+
+### Assign roles to user
+POST {{baseUrl}}/rbac/users/1/roles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "roleIds": [1]
+}
+
+### Get user roles
+GET {{baseUrl}}/rbac/users/1/roles
+Authorization: Bearer {{token}}

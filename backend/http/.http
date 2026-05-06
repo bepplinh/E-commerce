@@ -1,0 +1,17 @@
+### Lấy danh sách sản phẩm
+GET http://localhost:5000/api/v1/products
+
+###
+# @name adminDashboard
+GET http://localhost:5000/api/v1/admin/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0dXNlckBleGFtcGxlLmNvbSIsImlhdCI6MTc3Nzk5NDAwOCwiZXhwIjoxNzc3OTk0OTA4fQ.oOpnKyuRR1EEK3LGnhuaZovwZ3CVCgw6vBuNBkjRWZU
+
+###
+POST http://localhost:5000/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "username": "ducanh",
+    "email": "abc@gmail.com",
+    "password": "123456"
+}

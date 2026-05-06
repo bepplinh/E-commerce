@@ -15,15 +15,16 @@ class ProductRepository {
         });
     }
 
-    getFilterOptions(optionName) {
+    getAttributes() {
+        return prisma.attribute.findMany({
+            orderBy: { name: "asc" },
+        });
+    }
+
+    getUniqueValuesByAttributeId(attributeId) {
         return prisma.optionValue.findMany({
             where: {
-                option: { name: optionName },
-                variantMappings: {
-                    some: {
-                        variant: { product: { isActive: true }, isActive: true },
-                    },
-                },
+                option: { attributeId: attributeId },
             },
             distinct: ["value"],
             select: { value: true, metadata: true },
@@ -54,8 +55,22 @@ class ProductRepository {
         return prisma.product.findUnique({
             where: { id },
             include: {
-                options: { include: { values: true } },
+                options: {
+                    include: {
+                        attribute: true,
+                        values: true,
+                    },
+                },
             },
+        });
+    }
+
+    findVariantsById(variantIds) {
+        return prisma.productVariant.findMany({
+            where: {
+                id: { in: variantIds },
+            },
+            include: { product: true },
         });
     }
 }
