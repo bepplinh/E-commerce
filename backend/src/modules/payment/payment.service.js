@@ -1,4 +1,3 @@
-import { NotFoundError } from "../../utils/app-error";
 import OrderRepository from "../order/order.repository";
 import productRepository from "../product/product.repository";
 
@@ -6,25 +5,22 @@ const PaymentService = {
     createPayment: async (paymentData) => {
         const { userId, items, shippingAddressId, paymentMethod, voucherId, note } = paymentData;
 
+        // items: [
+        //     {
+        //         variantId: 1,
+        //         quantity: 2,
+        //     },
+        //     {
+        //         variantId: 2,
+        //         quantity: 3,
+        //     },
+        // ];
+
         const variants = await productRepository.findVariantsById(items.map((item) => item.variantId));
 
-        const variantMap = new Map(variants);
+        const variantMap = new Map(variants.map((v) => [v.id, v]));
 
-        let totalAmount = 0;
-        const orderItems = items.map((item) => {
-            const variant = variantMap.get(item.variantId);
-            if (!variant) throw new NotFoundError("Variant not found");
-
-            const price = Number(variant.price);
-            totalAmount += price * item.quantity;
-
-            return {
-                variantId: variant.id,
-                price: variant.price,
-                snapshotSku: variant.sku,
-                snapshotName: variant.product.name,
-            };
-        });
+        const { totalAmount, orderItems } = caculateTotalOrder(items, variantMap);
     },
 };
 
