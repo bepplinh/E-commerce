@@ -65,6 +65,15 @@ class ProductRepository {
         });
     }
 
+    findVariantById(variantId) {
+        return prisma.productVariant.findUnique({
+            where: {
+                id: variantId,
+            },
+            include: { product: true },
+        });
+    }
+
     findVariantsById(variantIds) {
         return prisma.productVariant.findMany({
             where: {

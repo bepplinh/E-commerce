@@ -1,9 +1,11 @@
 import express from "express";
 import PaymentController from "./payment.controller.js";
-import { idempotencyMiddleware } from "../../middlewares/idempotency.middleware.js";
+import verifyToken from "../../middlewares/auth.middleware.js";
+import checkApiKey from "./middleware/webhookSepay.middleware.js";
 
-const router = express.Router();
+const paymentRouter = express.Router();
 
-router.post("/create-payment", idempotencyMiddleware, PaymentController.createPayment);
+paymentRouter.post("/create-payment", verifyToken, PaymentController.createPayment);
+paymentRouter.post("/webhook", checkApiKey, PaymentController.webhook);
 
-export default router;
+export default paymentRouter;

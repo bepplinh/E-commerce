@@ -12,6 +12,8 @@ import orderRouter from "./src/modules/order/order.route.js";
 import rbacRouter from "./src/modules/rbac/rbac.route.js";
 import adminRouter from "./src/modules/admin/admin.route.js";
 import verifyToken from "./src/middlewares/auth.middleware.js";
+import paymentRouter from "./src/modules/payment/payment.route.js";
+import wishlistRouter from "./src/modules/wishlist/wishlist.route.js";
 
 dotenv.config();
 
@@ -27,9 +29,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/rbac", rbacRouter);
+app.use("/api/v1/payments", paymentRouter);
 
 app.use(verifyToken);
 app.use("/api/v1/admin", adminRouter);
