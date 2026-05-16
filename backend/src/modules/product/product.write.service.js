@@ -9,7 +9,8 @@ import {
     createProductOptions,
     createProductVariants,
     updateBaseProduct,
-    replaceProductImages,
+    patchProductImages,
+    upsertProductOptions,
     upsertProductVariants,
 } from "./helpers/transaction.helpers.js";
 import { productDetailInclude } from "./product.queries.js";
@@ -25,11 +26,11 @@ const generateUniqueSlug = async (name) => {
 
     let slug = baseSlug;
     let counter = 1;
-    let existingProduct = await productRepository.getProductBySlug(slug);
+    let existingProduct = await productRepository.getProductSlugBySlug(slug);
 
     while (existingProduct) {
         slug = `${baseSlug}-${counter}`;
-        existingProduct = await productRepository.getProductBySlug(slug);
+        existingProduct = await productRepository.getProductSlugBySlug(slug);
         counter++;
     }
 
@@ -74,23 +75,60 @@ const updateProduct = async (id, body) => {
         throw new NotFoundError("Không tìm thấy sản phẩm");
     }
 
-    const { images, variants, ...productFields } = body;
+    const { images, options, variants, ...productFields } = body;
 
     if (productFields.name && productFields.name !== product.name && !productFields.slug) {
         productFields.slug = await generateUniqueSlug(productFields.name);
     }
 
-    const optionValueMap = buildOptionValueLookup(product.options);
-
     return prisma.$transaction(async ($tx) => {
-        await updateBaseProduct($tx, productId, productFields);
+        const currentProduct = await $tx.product.findUnique({
+            where: { id: productId },
+            include: {
+                images: true,
+                options: {
+                    include: {
+                        attribute: true,
+                        values: true,
+                    },
+                },
+                variants: {
+                    include: {
+                        images: true,
+                        optionValues: {
+                            include: {
+                                optionValue: {
+                                    include: {
+                                        option: {
+                                            include: {
+                                                attribute: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
 
-        if (images) {
-            await replaceProductImages($tx, productId, images, null);
+        if (!currentProduct) {
+            throw new NotFoundError("Không tìm thấy sản phẩm");
         }
 
-        if (variants) {
-            await upsertProductVariants($tx, productId, variants, optionValueMap);
+        const optionValueMap = options !== undefined
+            ? await upsertProductOptions($tx, productId, currentProduct.options, options)
+            : buildOptionValueLookup(currentProduct.options);
+
+        await updateBaseProduct($tx, productId, productFields);
+
+        if (images !== undefined) {
+            await patchProductImages($tx, productId, currentProduct.images, images, null);
+        }
+
+        if (variants !== undefined) {
+            await upsertProductVariants($tx, productId, currentProduct.variants, variants, optionValueMap);
         }
 
         return $tx.product.findUnique({

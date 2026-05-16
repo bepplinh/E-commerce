@@ -14,6 +14,10 @@ import adminRouter from "./src/modules/admin/admin.route.js";
 import verifyToken from "./src/middlewares/auth.middleware.js";
 import paymentRouter from "./src/modules/payment/payment.route.js";
 import wishlistRouter from "./src/modules/wishlist/wishlist.route.js";
+import addressRouter from "./src/modules/address/address.route.js";
+import userRouter from "./src/modules/user/user.route.js";
+import reviewRouter from "./src/modules/review/review.route.js";
+import voucherRouter from "./src/modules/voucher/voucher.route.js";
 
 dotenv.config();
 
@@ -34,6 +38,10 @@ app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/rbac", rbacRouter);
 app.use("/api/v1/payments", paymentRouter);
+app.use("/api/v1/address", addressRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/vouchers", voucherRouter);
 
 app.use(verifyToken);
 app.use("/api/v1/admin", adminRouter);

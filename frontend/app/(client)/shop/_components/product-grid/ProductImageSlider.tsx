@@ -5,15 +5,19 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import ButtonAddToCart from "./ButtonAddToCart";
 
-import { Product } from "@/types/product";
+import { Product, ProductImage } from "@/types/product";
 
 interface ImageCardProps {
-    images: string[];
+    images: ProductImage[];
     product: Product;
     activeColorIndex?: number;
 }
 
-export default function ImageCard({ images, product, activeColorIndex }: ImageCardProps) {
+export default function ImageCard({
+    images,
+    product,
+    activeColorIndex,
+}: ImageCardProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
@@ -37,7 +41,8 @@ export default function ImageCard({ images, product, activeColorIndex }: ImageCa
     return (
         <div className="relative group overflow-hidden">
             <div className="relative aspect-3/4 w-full">
-                {images.map((src, index) => {
+                {images.map((img, index) => {
+                    const src = img.imageUrl;
                     const isVisible = index === currentIndex || index === 0;
                     if (!isVisible) return null;
                     return (

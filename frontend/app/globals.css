@@ -61,6 +61,32 @@ body {
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
+    
+    /* Dovetail Admin System Colors */
+    --color-admin-background: #050505;
+    --color-admin-surface: #0d0d0d;
+    --color-admin-surface-elevated: #141414;
+    --color-admin-surface-floating: #1e1e1e;
+    --color-admin-border-subtle: #262626;
+    --color-admin-border-default: #333333;
+    --color-admin-text-primary: #ffffff;
+    --color-admin-text-secondary: #a1a1a1;
+    --color-admin-text-tertiary: #666666;
+    --color-admin-accent: #7c3aed;
+    --color-admin-success: #10b981;
+    --color-admin-danger: #ef4444;
+    --color-admin-warning: #f59e0b;
+    --color-admin-info: #3b82f6;
+
+    /* Dynamic Admin Colors mapping to variables */
+    --color-admin-bg: var(--admin-background);
+    --color-admin-surface: var(--admin-surface);
+    --color-admin-surface-elevated: var(--admin-surface-elevated);
+    --color-admin-border-subtle: var(--admin-border-subtle);
+    --color-admin-border-default: var(--admin-border-default);
+    --color-admin-text-primary: var(--admin-text-primary);
+    --color-admin-text-secondary: var(--admin-text-secondary);
+    --color-admin-text-tertiary: var(--admin-text-tertiary);
 }
 
 :root {
@@ -88,14 +114,17 @@ body {
     --chart-4: oklch(0.627 0.265 303.891);
     --chart-5: oklch(0.645 0.246 16.439);
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* Admin UI - Light Mode Defaults */
+    --admin-background: #ffffff;
+    --admin-surface: #f9f9f9;
+    --admin-surface-elevated: #f0f0f0;
+    --admin-border-subtle: #e5e5e5;
+    --admin-border-default: #d4d4d4;
+    --admin-text-primary: #0a0a0a;
+    --admin-text-secondary: #525252;
+    --admin-text-tertiary: #737373;
 }
 
 .dark {
@@ -122,14 +151,18 @@ body {
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.891);
     --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.269 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
+
+    /* Admin UI - Dark Mode (Dovetail System) */
+    --admin-background: #050505;
+    --admin-surface: #0d0d0d;
+    --admin-surface-elevated: #141414;
+    --admin-border-subtle: #262626;
+    --admin-border-default: #333333;
+    --admin-text-primary: #ffffff;
+    --admin-text-secondary: #a1a1a1;
+    --admin-text-tertiary: #666666;
 }
 
 @layer base {

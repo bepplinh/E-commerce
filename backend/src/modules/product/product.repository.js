@@ -2,6 +2,13 @@ import prisma from "../../config/prisma.js";
 import { productListSelect, productDetailInclude } from "./product.queries.js";
 
 class ProductRepository {
+    getProductSlugBySlug(slug) {
+        return prisma.product.findUnique({
+            where: { slug },
+            select: { id: true },
+        });
+    }
+
     getBrands() {
         return prisma.brand.findMany({
             select: { id: true, name: true, slug: true },
@@ -29,6 +36,26 @@ class ProductRepository {
             distinct: ["value"],
             select: { value: true, metadata: true },
             orderBy: { value: "asc" },
+        });
+    }
+
+    getUniqueValuesByAttributeIds(attributeIds) {
+        return prisma.optionValue.findMany({
+            where: {
+                option: {
+                    attributeId: { in: attributeIds },
+                },
+            },
+            distinct: ["value", "optionId"],
+            select: {
+                value: true,
+                metadata: true,
+                option: {
+                    select: {
+                        attributeId: true,
+                    },
+                },
+            },
         });
     }
 

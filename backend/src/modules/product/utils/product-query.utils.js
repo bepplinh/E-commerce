@@ -13,7 +13,7 @@ const parseOptionalNumber = (value, fieldName) => {
     return parsed;
 };
 
-const parsePositiveInteger = (value, fieldName, fallback) => {
+const parsePositiveInteger = (value, fieldName, fallback, max) => {
     const parsed = parseOptionalNumber(value, fieldName);
     if (parsed === undefined) {
         return fallback;
@@ -21,6 +21,10 @@ const parsePositiveInteger = (value, fieldName, fallback) => {
 
     if (!Number.isInteger(parsed) || parsed <= 0) {
         throw new BadRequestError(`${fieldName} phải là số nguyên dương`);
+    }
+
+    if (max !== undefined && parsed > max) {
+        return max;
     }
 
     return parsed;
@@ -46,6 +50,6 @@ export const parseProductListQuery = (query = {}) => {
         minPrice: parseOptionalNumber(minPrice, "minPrice"),
         maxPrice: parseOptionalNumber(maxPrice, "maxPrice"),
         page: parsePositiveInteger(page, "page", 1),
-        limit: parsePositiveInteger(limit, "limit", 10),
+        limit: parsePositiveInteger(limit, "limit", 10, 50),
     };
 };

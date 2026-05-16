@@ -32,7 +32,9 @@ export default function ProductCard({ product }: { product: Product }) {
             />
 
             <div className="flex justify-between items-center mt-3 mb-1">
-                <p className="font-normal text-gray-400">{product.category}</p>
+                <p className="font-normal text-gray-400">
+                    {product.category.name}
+                </p>
                 <Heart
                     size={16}
                     className="text-gray-400 hover:text-red-500 transition-colors"
@@ -40,12 +42,12 @@ export default function ProductCard({ product }: { product: Product }) {
             </div>
             <div>
                 <h3 className="font-medium text-gray-900 group-hover:text-black transition-colors">
-                    {product.title}
+                    {product.name}
                 </h3>
             </div>
             <div className="mt-1 flex items-center justify-between">
                 <span className="font-medium text-gray-900">
-                    ${product.price}
+                    ${product.basePrice}
                 </span>
 
                 {product.colors && product.colors.length > 0 && (
@@ -82,9 +84,11 @@ export default function ProductCard({ product }: { product: Product }) {
                         <Star
                             key={index}
                             size={10}
-                            fill={index < product.rating ? "black" : "none"}
+                            fill={
+                                index < product.averageRating ? "black" : "none"
+                            }
                             className={
-                                index < product.rating
+                                index < product.averageRating
                                     ? "text-black"
                                     : "text-gray-300"
                             }
@@ -92,7 +96,7 @@ export default function ProductCard({ product }: { product: Product }) {
                     ))}
                 </div>
                 <span className="text-[12px] text-gray-500">
-                    {product.reviews} reviews
+                    {product.reviewCount} reviews
                 </span>
             </div>
         </div>

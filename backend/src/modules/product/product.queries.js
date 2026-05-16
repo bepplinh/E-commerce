@@ -7,16 +7,44 @@ export const productListSelect = {
     brand: {
         select: { name: true, slug: true },
     },
+    category: {
+        select: { name: true, slug: true },
+    },
     // Chỉ lấy Global Thumbnail (variantId null + isPrimary)
     images: {
         where: { isPrimary: true, variantId: null },
-        select: { imageUrl: true },
+        select: { imageUrl: true, isPrimary: true },
         take: 1,
     },
     variants: {
         where: { isActive: true },
-        select: { price: true },
+        select: { 
+            price: true,
+            optionValues: {
+                select: {
+                    optionValue: {
+                        select: {
+                            value: true,
+                            metadata: true,
+                            option: {
+                                select: {
+                                    attribute: {
+                                        select: { name: true }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
     },
+    _count: {
+        select: { reviews: true }
+    },
+    reviews: {
+        select: { rating: true }
+    }
 };
 
 // Dùng cho API lấy chi tiết (getProductBySlug)

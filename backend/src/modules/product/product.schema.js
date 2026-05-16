@@ -15,9 +15,17 @@ const optionSchema = z.object({
 });
 
 // ── Image ─────────────────────────────────────────────────────────────────────
-const imageSchema = z.object({
+const createImageSchema = z.object({
     url: z.string().url("URL ảnh không hợp lệ"),
     isPrimary: z.boolean().default(false),
+    sortOrder: z.number().int().nonnegative().optional(),
+});
+
+const updateImageSchema = z.object({
+    id: z.number().int().positive("ID ảnh không hợp lệ").optional(),
+    url: z.string().url("URL ảnh không hợp lệ").optional(),
+    isPrimary: z.boolean().optional(),
+    sortOrder: z.number().int().nonnegative().optional(),
 });
 
 // ── Variant ───────────────────────────────────────────────────────────────────
@@ -26,7 +34,7 @@ const createVariantSchema = z.object({
     price: z.number({ required_error: "Giá variant là bắt buộc" }).positive("Giá phải lớn hơn 0"),
     stockQuantity: z.number().int().min(0, "Số lượng không được âm").default(0),
     attributes: z.record(z.string(), z.string()).optional().default({}),
-    images: z.array(imageSchema).optional().default([]), // Ảnh riêng cho variant
+    images: z.array(createImageSchema).optional().default([]), // Ảnh riêng cho variant
 });
 
 const updateVariantSchema = z.object({
@@ -35,7 +43,7 @@ const updateVariantSchema = z.object({
     price: z.number().positive("Giá phải lớn hơn 0").optional(),
     stockQuantity: z.number().int().min(0, "Số lượng không được âm").optional(),
     attributes: z.record(z.string(), z.string()).optional(),
-    images: z.array(imageSchema).optional(),
+    images: z.array(updateImageSchema).optional(),
 });
 
 // ── Product payload ───────────────────────────────────────────────────────────
@@ -61,7 +69,7 @@ export const createProductSchema = z.object({
     isActive: z.boolean().default(true),
     
     // Đổi từ imageUrls (string[]) sang images (object[])
-    images: z.array(imageSchema).optional().default([]),
+    images: z.array(createImageSchema).optional().default([]),
     
     options: z.array(optionSchema).optional().default([]),
     
@@ -78,6 +86,7 @@ export const updateProductSchema = z.object({
     description: z.string().optional().nullable(),
     basePrice: z.number().positive("Giá cơ bản phải lớn hơn 0").optional(),
     isActive: z.boolean().optional(),
-    images: z.array(imageSchema).optional(),
+    images: z.array(updateImageSchema).optional(),
+    options: z.array(optionSchema).optional(),
     variants: z.array(updateVariantSchema).optional(),
 });
