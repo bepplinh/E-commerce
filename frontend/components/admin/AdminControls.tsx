@@ -62,3 +62,39 @@ export const AdminInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttr
 );
 
 AdminInput.displayName = "AdminInput";
+
+export const AdminTextArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        ref={ref}
+        className={cn(
+          "w-full bg-admin-surface border border-admin-border-default rounded px-3 py-2 text-sm text-admin-text-primary placeholder:text-admin-text-tertiary outline-none transition-all focus:border-[#7c3aed] focus:ring-1 focus:ring-[#7c3aed]/30 disabled:opacity-40 min-h-[100px] resize-y",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+
+AdminTextArea.displayName = "AdminTextArea";
+
+export const AdminSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <select
+        ref={ref}
+        className={cn(
+          "w-full bg-admin-surface border border-admin-border-default rounded px-3 py-2 text-sm text-admin-text-primary placeholder:text-admin-text-tertiary outline-none transition-all focus:border-[#7c3aed] focus:ring-1 focus:ring-[#7c3aed]/30 disabled:opacity-40 appearance-none",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </select>
+    );
+  }
+);
+
+AdminSelect.displayName = "AdminSelect";

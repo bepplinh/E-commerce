@@ -1,7 +1,7 @@
 import productRepository from "./product.repository.js";
 import { NotFoundError } from "../../utils/app-error.js";
-import { buildWhereClause } from "./utils/product-filter.utils.js";
-import { parseProductListQuery } from "./utils/product-query.utils.js";
+import { buildWhereClause, buildOrderByClause, buildPagination } from "./utils/product-filter.utils.js";
+import { parseProductQuery } from "./utils/product-query.utils.js";
 import {
     createProduct as createProductCommand,
     updateProduct as updateProductCommand,
@@ -45,51 +45,29 @@ const getFilterData = async () => {
     };
 };
 
-const getProductList = async (query) => {
-    const { category, color, brand, size, minPrice, maxPrice, page, limit } = parseProductListQuery(query);
-    const where = buildWhereClause({ category, brand, color, size, minPrice, maxPrice });
-    const skip = (page - 1) * limit;
+const getProductList = async (rawQuery) => {
+    // 1. Parse + validate raw req.query → throw 400 nếu không hợp lệ
+    const query = parseProductQuery(rawQuery);
 
-    const [products, total] = await productRepository.getProducts(where, skip, limit);
+    // 2. Build Prisma args từ parsed query
+    const where   = buildWhereClause(query);
+    const orderBy = buildOrderByClause(query);
+    const { skip, take } = buildPagination(query);
 
-    const processedProducts = products.map((product) => {
-        const reviewCount = product._count.reviews;
-        const averageRating =
-            reviewCount > 0
-                ? product.reviews.reduce((acc, rev) => acc + rev.rating, 0) /
-                  reviewCount
-                : 0;
+    // 3. Gọi repository (parallel: data + count)
+    const [items, total] = await Promise.all([
+        productRepository.findMany({ where, orderBy, skip, take }),
+        productRepository.count({ where }),
+    ]);
 
-        // Trích xuất danh sách màu sắc duy nhất từ các biến thể
-        const colors = new Set();
-        product.variants.forEach((variant) => {
-            variant.optionValues.forEach((ov) => {
-                const attrName =
-                    ov.optionValue.option.attribute.name.toLowerCase();
-                if (attrName === "color" || attrName === "màu sắc") {
-                    colors.add(ov.optionValue.value);
-                }
-            });
-        });
-
-        const { reviews, _count, ...rest } = product;
-
-        return {
-            ...rest,
-            averageRating: Math.round(averageRating * 10) / 10,
-            reviewCount,
-            colors: Array.from(colors),
-            basePrice: Number(product.basePrice),
-        };
-    });
-
+    // 4. Trả về data + pagination meta
     return {
-        products: processedProducts,
+        items,
         pagination: {
-            page,
-            limit,
+            page:       query.page,
+            limit:      query.limit,
             total,
-            totalPages: Math.ceil(total / limit),
+            totalPages: Math.ceil(total / query.limit),
         },
     };
 };

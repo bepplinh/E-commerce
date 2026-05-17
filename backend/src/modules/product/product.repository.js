@@ -59,12 +59,13 @@ class ProductRepository {
         });
     }
 
-    getProducts(where, skip, take) {
+    getProducts(where, skip, take, orderBy = { createdAt: "desc" }) {
         return Promise.all([
             prisma.product.findMany({
                 where,
                 skip,
                 take,
+                orderBy,
                 select: productListSelect,
             }),
             prisma.product.count({ where }),

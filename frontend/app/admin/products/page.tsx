@@ -2,6 +2,7 @@ import { AdminCard } from "@/components/admin/AdminCard";
 import { AdminButton, AdminInput } from "@/components/admin/AdminControls";
 import { Plus, Search, Filter, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/libs/utils";
+import Link from "next/link";
 
 export default function AdminProductsPage() {
   return (
@@ -13,10 +14,12 @@ export default function AdminProductsPage() {
           <p className="text-sm text-[#a1a1a1]">Manage your inventory and product listings.</p>
         </div>
         <div className="flex items-center gap-2">
-          <AdminButton variant="primary" size="sm">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Product
-          </AdminButton>
+          <Link href="/admin/products/new">
+            <AdminButton variant="primary" size="sm">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Product
+            </AdminButton>
+          </Link>
         </div>
       </div>
 
@@ -91,10 +94,12 @@ export default function AdminProductsPage() {
                   <td className="py-4 px-4 font-admin-mono tabular-nums text-white">{product.price}</td>
                   <td className="py-4 px-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <AdminButton variant="ghost" size="xs" className="h-8 px-2.5">
-                        <Pencil className="w-3 h-3 mr-1.5" />
-                        Edit
-                      </AdminButton>
+                      <Link href={`/admin/products/${product.id}`}>
+                        <AdminButton variant="ghost" size="xs" className="h-8 px-2.5">
+                          <Pencil className="w-3 h-3 mr-1.5" />
+                          Edit
+                        </AdminButton>
+                      </Link>
                       <AdminButton variant="danger" size="xs" className="h-8 px-2.5">
                         <Trash2 className="w-3 h-3 mr-1.5" />
                         Delete
